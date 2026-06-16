@@ -1,7 +1,7 @@
 body{
 margin:0;
 overflow:hidden;
-background:radial-gradient(circle at center,#050510,#000);
+background:black;
 font-family:PingFang SC;
 color:white;
 }
@@ -10,10 +10,18 @@ canvas{
 position:fixed;
 top:0;
 left:0;
-filter:blur(0.3px) contrast(1.4);
+filter:blur(0.5px) contrast(1.5);
 }
 
-/* UI */
+video{
+position:fixed;
+bottom:20px;
+right:20px;
+width:180px;
+border-radius:12px;
+opacity:0.3;
+}
+
 .ui{
 position:absolute;
 width:100%;
@@ -22,52 +30,21 @@ display:flex;
 align-items:center;
 justify-content:center;
 flex-direction:column;
-transition:1s;
 }
 
 .title h1{
-font-size:52px;
-letter-spacing:12px;
+font-size:48px;
+letter-spacing:10px;
 background:linear-gradient(90deg,#00c6ff,#ff00cc);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .panel{
-width:380px;
-padding:22px;
-border-radius:20px;
+margin-top:20px;
+padding:20px;
+border-radius:16px;
 background:rgba(255,255,255,0.05);
 backdrop-filter:blur(30px);
 border:1px solid rgba(255,255,255,0.1);
-box-shadow:0 0 120px rgba(0,200,255,0.08);
-}
-
-button{
-margin:5px;
-padding:10px 14px;
-border-radius:999px;
-border:none;
-cursor:pointer;
-background:rgba(120,120,255,0.2);
-color:white;
-}
-
-button:hover{
-transform:scale(1.08);
-background:rgba(120,200,255,0.4);
-}
-
-.main{
-width:100%;
-background:linear-gradient(90deg,#00c6ff,#0072ff);
-}
-
-#output{
-margin-top:10px;
-font-size:13px;
-line-height:1.6;
-opacity:0.85;
-border-left:2px solid rgba(0,200,255,0.5);
-padding-left:10px;
 }
