@@ -1,61 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOOD SCAPE｜Emotion Field</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>MOOD SCAPE｜情绪生成宇宙</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="canvas"></div>
+<canvas id="bg"></canvas>
 
-<!-- INTRO -->
-<section id="intro" class="page active">
-  <h1>MOOD SCAPE</h1>
-  <p>Emotion Field Simulator</p>
-  <button onclick="start()">ENTER SYSTEM</button>
-</section>
+<div class="ui">
 
-<!-- CONTROL -->
-<section id="control" class="page">
+  <div class="brand">
+    <h1>MOOD SCAPE</h1>
+    <p>情绪生成宇宙模拟器</p>
+  </div>
 
-  <div class="panel">
+  <div class="card">
 
-    <h2>Emotion Input</h2>
+    <div class="section-title">选择情绪维度</div>
 
     <div class="moods">
-      <button onclick="setMood('calm')">Calm</button>
-      <button onclick="setMood('anxiety')">Anxiety</button>
-      <button onclick="setMood('tired')">Tired</button>
-      <button onclick="setMood('chaos')">Chaos</button>
+      <button onclick="setMood('calm')">宁静</button>
+      <button onclick="setMood('anxiety')">焦虑</button>
+      <button onclick="setMood('tired')">疲惫</button>
+      <button onclick="setMood('chaos')">混沌</button>
     </div>
 
-    <p>Energy Field</p>
-    <input type="range" min="0" max="100" id="energy"/>
+    <div class="section-title">能量密度</div>
+    <input id="energy" type="range" min="0" max="100" value="50">
 
-    <button onclick="generate()">Generate World</button>
+    <button class="generate" onclick="generateWorld()">
+      生成情绪宇宙
+    </button>
+
+    <div id="output"></div>
 
   </div>
 
-</section>
-
-<!-- ART -->
-<section id="art" class="page">
-
-  <div id="world"></div>
-
-  <div class="overlay">
-    <h2 id="title"></h2>
-    <p id="desc"></p>
-
-    <button onclick="exportArt()">Export Poster</button>
-    <button onclick="restart()">Rebuild</button>
-  </div>
-
-</section>
+</div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
