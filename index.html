@@ -2,46 +2,32 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>MOOD SCAPE ∞</title>
+<title>MOOD SCAPE ∞ GOD MODE</title>
+
 <link rel="stylesheet" href="style.css">
+
+<!-- 🤖 AI人脸识别 -->
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
 </head>
 
 <body>
 
 <canvas id="bg"></canvas>
 
-<audio id="music" loop>
-  <source src="ambient.mp3" type="audio/mp3">
-</audio>
+<video id="video" autoplay muted playsinline></video>
+
+<audio id="calmSound" loop src="calm.mp3"></audio>
+<audio id="chaosSound" loop src="chaos.mp3"></audio>
 
 <div class="ui">
-
   <div class="title">
     <h1>MOOD SCAPE ∞</h1>
-    <p>情绪即宇宙 · 观测即创造</p>
+    <p>AI情绪驱动宇宙装置</p>
   </div>
 
   <div class="panel">
-
-    <div class="row">
-      <button onclick="setMood('calm')">宁静</button>
-      <button onclick="setMood('anxiety')">焦虑</button>
-      <button onclick="setMood('tired')">疲惫</button>
-      <button onclick="setMood('chaos')">混沌</button>
-    </div>
-
-    <input id="energy" type="range" min="0" max="100">
-
-    <button class="main" onclick="generate()">生成宇宙状态</button>
-
-    <button onclick="toggleImmersion()">进入沉浸模式</button>
-
-    <button onclick="toggleMusic()">音乐</button>
-
-    <div id="output"></div>
-
+    <div id="output">初始化AI情绪识别中...</div>
   </div>
-
 </div>
 
 <script src="script.js"></script>
