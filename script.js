@@ -1,121 +1,111 @@
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-/* 🌌 情绪宇宙系统 */
-const world = {
-  calm: { color: "0,220,255", speed: 0.3 },
-  anxiety: { color: "255,80,160", speed: 1.5 },
-  tired: { color: "180,180,180", speed: 0.2 },
-  chaos: { color: "255,0,200", speed: 2.2 }
+let mood="calm";
+let immersion=false;
+
+const world={
+calm:{c:"0,220,255",s:0.4},
+anxiety:{c:"255,80,160",s:1.6},
+tired:{c:"180,180,180",s:0.3},
+chaos:{c:"255,0,200",s:2.2}
 };
 
-let mood = "calm";
-let mouse = { x: canvas.width/2, y: canvas.height/2 };
+let mouse={x:0,y:0};
 
-/* 🧠 鼠标引力 */
-window.addEventListener("mousemove", e => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+window.addEventListener("mousemove",e=>{
+mouse.x=e.clientX;
+mouse.y=e.clientY;
 });
 
-function setMood(m){
-  mood = m;
+function setMood(m){mood=m;}
+
+function toggleMusic(){
+const m=document.getElementById("music");
+m.paused?m.play():m.pause();
 }
 
-/* 🌌 情绪生成器 */
-function generateWorld(){
-
-  const energy = document.getElementById("energy").value;
-
-  const text =
-`【宇宙生成完成】
-
-当前情绪：${mood}
-能量密度：${energy}
-
-系统状态：
-现实结构正在根据情绪参数重新编译。
-
-观测者正在影响空间本身的物理规则。`;
-
-  typeWriter(text);
+function toggleImmersion(){
+immersion=!immersion;
+document.querySelector(".panel").style.display=immersion?"none":"block";
+document.querySelector(".title").style.display=immersion?"none":"block";
 }
 
-/* ✨ 打字机 */
-function typeWriter(text){
-  const el = document.getElementById("output");
-  el.innerHTML = "";
-  let i = 0;
+function generate(){
+const e=document.getElementById("energy").value;
+const w=world[mood];
 
-  function run(){
-    if(i < text.length){
-      el.innerHTML += text[i];
-      i++;
-      setTimeout(run, 18);
-    }
-  }
-  run();
+typeWriter(
+`宇宙状态生成完成
+
+情绪：${mood}
+能量：${e}
+
+系统结论：
+现实正在被观测者重构。`
+);
 }
 
-/* 🌌 高级粒子系统 */
-let particles = [];
-
-for(let i=0;i<320;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    vx:(Math.random()-0.5),
-    vy:(Math.random()-0.5)
-  });
+function typeWriter(t){
+let i=0;
+const el=document.getElementById("output");
+el.innerHTML="";
+(function run(){
+if(i<t.length){
+el.innerHTML+=t[i++];
+setTimeout(run,12);
+}
+})();
 }
 
-/* 🌊 动画核心 */
+let p=[];
+for(let i=0;i<350;i++){
+p.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5),
+vy:(Math.random()-0.5)
+});
+}
+
 function animate(){
 
-  const w = world[mood];
+const w=world[mood];
 
-  /* 🌑 空间残影（关键高级感） */
-  ctx.fillStyle = "rgba(0,0,0,0.08)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle=immersion?"rgba(0,0,0,0.06)":"rgba(0,0,0,0.12)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.globalCompositeOperation = "lighter";
-  ctx.fillStyle = `rgba(${w.color},0.7)`;
+ctx.globalCompositeOperation="lighter";
+ctx.fillStyle=`rgba(${w.c},0.75)`;
 
-  particles.forEach(p=>{
+p.forEach(o=>{
 
-    /* 🧲 鼠标引力 */
-    let dx = mouse.x - p.x;
-    let dy = mouse.y - p.y;
+let dx=mouse.x-o.x;
+let dy=mouse.y-o.y;
 
-    p.vx += dx * 0.00002;
-    p.vy += dy * 0.00002;
+o.vx+=dx*0.00002;
+o.vy+=dy*0.00002;
 
-    /* 🌌 情绪扰动 */
-    p.vx += (Math.random()-0.5)*0.02;
-    p.vy += (Math.random()-0.5)*0.02;
+o.vx*=0.96;
+o.vy*=0.96;
 
-    /* 🌊 阻尼（高级关键） */
-    p.vx *= 0.96;
-    p.vy *= 0.96;
+o.x+=o.vx*w.s;
+o.y+=o.vy*w.s;
 
-    p.x += p.vx * w.speed;
-    p.y += p.vy * w.speed;
+if(o.x<0)o.x=canvas.width;
+if(o.x>canvas.width)o.x=0;
+if(o.y<0)o.y=canvas.height;
+if(o.y>canvas.height)o.y=0;
 
-    /* 🔁 空间循环 */
-    if(p.x<0)p.x=canvas.width;
-    if(p.x>canvas.width)p.x=0;
-    if(p.y<0)p.y=canvas.height;
-    if(p.y>canvas.height)p.y=0;
+ctx.beginPath();
+ctx.arc(o.x,o.y,2.6,0,Math.PI*2);
+ctx.fill();
+});
 
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,2.6,0,Math.PI*2);
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animate);
+requestAnimationFrame(animate);
 }
 
 animate();
