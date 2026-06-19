@@ -1,38 +1,36 @@
 # 空白画布急诊室｜Canva 可画 AI 设计急诊 H5
 
-这是一个可直接部署到 GitHub Pages 的单文件 H5 作品，主题为 **Canva 可画 × AI 设计急诊室**。
+这是一个适合课程作业提交的单文件 H5 项目，主题为“Canva 可画 AI 设计急诊室”。
 
-## 项目特点
+## 项目亮点
 
-- 手机竖版 H5 体验
-- 7 屏剧情式交互页面
-- Canva 可画品牌主题
-- AI 急诊舱、设计症状诊断、视觉抢救、Before / After 对比
-- 动态粒子背景、玻璃拟态、霓虹渐变、实时任务处方
-- 最后一屏包含“前往 Canva 可画”跳转按钮
-- 不依赖 npm，不需要构建，上传即可运行
+- 手机竖版 H5 视觉体验
+- 粒子动态背景
+- 设计症状诊断
+- AI 急诊舱叙事
+- 可编辑生成器：可修改标题、副标题、任务、配色、版式
+- Before / After 拖动对比
+- 支持导出 PNG
+- 最后一屏包含“前往 Canva 可画继续编辑”按钮
+- 可直接用 GitHub Pages 部署
 
-## GitHub Pages 部署
+## 部署方式
 
-1. 新建仓库，推荐名称：`canva-emergency-h5`
-2. 把 `index.html` 和 `README.md` 上传到仓库根目录
-3. 进入 `Settings → Pages`
+1. 新建 GitHub 仓库，建议命名为：`canva-emergency-h5`
+2. 上传 `index.html` 和 `README.md` 到仓库根目录
+3. 打开 `Settings → Pages`
 4. Source 选择 `Deploy from a branch`
-5. Branch 选择 `main / root`
-6. 保存后等待 1–2 分钟访问页面
+5. Branch 选择 `main`，Folder 选择 `/root`
+6. 保存后等待 1–2 分钟
 
-最终链接格式：
+访问地址格式：
 
 ```text
-https://你的用户名.github.io/canva-emergency-h5/
+https://你的GitHub用户名.github.io/canva-emergency-h5/
 ```
 
-## 修改 Canva 跳转链接
+## 作业说明可用文案
 
-打开 `index.html`，搜索：
+本作品以 Canva 可画为品牌对象，设计了一款名为《空白画布急诊室》的交互式 H5 页面。作品将用户面对设计任务时的无灵感、不会排版、配色混乱和时间紧迫等问题，转化为“设计急诊”的视觉叙事场景。用户通过点击进入急诊、选择设计症状、启动 AI 急诊舱、修改生成结果、拖动查看 Before/After 对比，最终完成从空白画布到可编辑视觉方案的转化体验。
 
-```html
-https://www.canva.cn/
-```
-
-可替换成你想跳转的具体 Canva 可画页面。
+作品在视觉上采用蓝紫渐变、玻璃拟态、AI 控制台、扫描线、漂浮卡片、动态粒子和前后对比等设计元素，强化科技感和品牌年轻化表达。创作过程中结合 AIGC 完成主题概念、页面结构、交互流程、文案生成和视觉关键词提炼，并通过 GitHub Pages 完成在线部署。
