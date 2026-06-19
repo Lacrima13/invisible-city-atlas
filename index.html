@@ -4,662 +4,118 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>空白画布急诊室｜Canva 可画 AI 设计急诊 H5</title>
-  <meta name="description" content="AIGC × H5 Interaction Design：Canva 可画 AI 设计急诊室。" />
+  <meta name="description" content="Canva 可画品牌主题 H5：空白画布急诊室，AI 设计急诊交互体验。" />
   <style>
-    :root {
-      --bg0:#08091f;
-      --bg1:#13122b;
-      --violet:#7b61ff;
-      --blue:#00d4ff;
-      --pink:#ff6b9a;
-      --green:#34f5c5;
-      --orange:#ffb86b;
-      --white:#ffffff;
-      --muted:#b9b8d9;
-      --glass: rgba(255,255,255,.105);
-      --line: rgba(255,255,255,.18);
-      --shadow: 0 30px 80px rgba(0,0,0,.35);
-      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    :root{
+      --bg:#070719;--bg2:#121033;--violet:#7B61FF;--blue:#00D4FF;--cyan:#34F5C5;--pink:#FF6B9A;--orange:#FFB86B;--yellow:#FFE66D;
+      --white:#fff;--muted:#bbb9dd;--glass:rgba(255,255,255,.105);--glass2:rgba(255,255,255,.16);--line:rgba(255,255,255,.2);
+      --shadow:0 26px 80px rgba(0,0,0,.34);--r:28px;
+      font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at 10% 15%, rgba(0,212,255,.35), transparent 28%),
-                  radial-gradient(circle at 88% 18%, rgba(123,97,255,.45), transparent 28%),
-                  radial-gradient(circle at 75% 78%, rgba(255,107,154,.28), transparent 34%),
-                  linear-gradient(135deg, #070817 0%, #13122b 48%, #070817 100%);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(circle at 50% 18%, black, transparent 75%);
-      opacity: .45;
-      z-index: 0;
-    }
-    body::after {
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background: repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 6px);
-      mix-blend-mode: overlay;
-      opacity:.15;
-      z-index: 8;
-    }
-    #particleCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-      opacity: .85;
-    }
-    .stage {
-      position: relative;
-      z-index: 2;
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 0 16px 34px;
-    }
-    .phone-shell {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: min(468px, calc(100vw - 24px));
-      height: min(900px, calc(100vh - 28px));
-      transform: translate(-50%, -50%);
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 42px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 36px 100px rgba(0,0,0,.32);
-      pointer-events: none;
-      z-index: 2;
-      opacity: .62;
-    }
-    .phone-shell::before {
-      content:"";
-      position:absolute;
-      top: 13px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 116px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.42);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 22px 4px 12px;
-      backdrop-filter: blur(18px);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .logo {
-      width: 36px;
-      height: 36px;
-      display:grid;
-      place-items:center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--blue), var(--violet) 62%, var(--pink));
-      box-shadow: 0 12px 30px rgba(0,212,255,.25);
-      color: white;
-      font-weight: 900;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-      color: rgba(255,255,255,.82);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      backdrop-filter: blur(16px);
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .dot {
-      width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 16px var(--green);
-    }
-    section.screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 74px 10px 88px;
-      position: relative;
-      isolation: isolate;
-    }
-    .eyebrow {
-      color: var(--green);
-      font-size: 12px;
-      line-height: 1;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      font-weight: 900;
-      margin-bottom: 18px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .eyebrow::before {
-      content:"";
-      width: 38px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--green));
-      box-shadow: 0 0 16px var(--green);
-    }
-    h1, h2, h3, p { margin:0; }
-    h1 {
-      font-size: clamp(46px, 14vw, 72px);
-      line-height: .98;
-      letter-spacing: -3.6px;
-      font-weight: 950;
-      margin-bottom: 18px;
-      text-wrap: balance;
-    }
-    h2 {
-      font-size: clamp(34px, 10vw, 52px);
-      line-height: 1.02;
-      letter-spacing: -2px;
-      font-weight: 950;
-      margin-bottom: 14px;
-      text-wrap: balance;
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, #fff 0%, #9ff8ff 35%, #b8a5ff 66%, #ff97bf 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .sub {
-      font-size: 17px;
-      line-height: 1.72;
-      color: rgba(255,255,255,.76);
-      max-width: 460px;
-      font-weight: 500;
-    }
-    .btns { display:flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-    a.btn, button.btn {
-      border: 0;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      padding: 15px 20px;
-      border-radius: 18px;
-      font-size: 15px;
-      font-weight: 900;
-      color: #06111c;
-      background: linear-gradient(135deg, var(--green), var(--blue));
-      box-shadow: 0 18px 46px rgba(0,212,255,.28), inset 0 0 0 1px rgba(255,255,255,.35);
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    a.btn:hover, button.btn:hover { transform: translateY(-3px) scale(1.015); box-shadow: 0 24px 64px rgba(0,212,255,.36); }
-    a.btn.secondary, button.btn.secondary {
-      color: white;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: none;
-      backdrop-filter: blur(18px);
-    }
-    .hero-grid {
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .emergency-card {
-      position: relative;
-      min-height: 360px;
-      padding: 20px;
-      border-radius: 34px;
-      background: linear-gradient(160deg, rgba(255,255,255,.2), rgba(255,255,255,.055));
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      transform-style: preserve-3d;
-    }
-    .emergency-card::before {
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(circle at 22% 12%, rgba(0,212,255,.32), transparent 30%), radial-gradient(circle at 88% 40%, rgba(255,107,154,.22), transparent 35%);
-      z-index:-1;
-    }
-    .canvas-patient {
-      position:absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%) rotate(-2deg);
-      width: min(300px, 80%);
-      aspect-ratio: .78;
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(235,246,255,.9));
-      box-shadow: 0 26px 72px rgba(0,0,0,.28);
-      color: #13122b;
-      padding: 22px;
-      animation: dangerShake 3.2s ease-in-out infinite;
-      overflow: hidden;
-    }
-    .canvas-patient::before {
-      content:"";
-      position:absolute;
-      inset:22px;
-      border: 2px dashed rgba(19,18,43,.18);
-      border-radius: 18px;
-    }
-    .patient-top { display:flex; align-items:center; justify-content:space-between; font-weight:950; font-size:13px; letter-spacing:.08em; }
-    .alert {
-      display:inline-flex; align-items:center; gap:6px;
-      color:white; background: linear-gradient(135deg, #ff3f75, #ff8b55);
-      padding:8px 10px; border-radius:999px; font-size:11px; font-weight:950;
-      box-shadow: 0 10px 24px rgba(255,107,154,.32);
-      animation: blink 1.15s steps(2, jump-none) infinite;
-    }
-    .card-title-mini { position:absolute; left:22px; bottom:22px; font-weight:950; font-size:28px; letter-spacing:-1.5px; line-height:1.05; color:#161634; }
-    .warning-tags { position:absolute; inset:0; pointer-events:none; }
-    .tag {
-      position:absolute;
-      padding:9px 11px;
-      border-radius:999px;
-      color:white;
-      font-size:12px;
-      font-weight:950;
-      letter-spacing:.03em;
-      background: rgba(255,255,255,.13);
-      border:1px solid rgba(255,255,255,.22);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 14px 34px rgba(0,0,0,.18);
-    }
-    .tag.t1{left:15px;top:34px;background:linear-gradient(135deg,var(--pink),#ff8b55);animation:float 4.3s ease-in-out infinite;}
-    .tag.t2{right:14px;top:76px;background:linear-gradient(135deg,var(--blue),var(--violet));animation:float 5s ease-in-out infinite reverse;}
-    .tag.t3{left:22px;bottom:78px;background:linear-gradient(135deg,var(--green),var(--blue));animation:float 4.6s ease-in-out infinite;}
-    .tag.t4{right:28px;bottom:28px;background:linear-gradient(135deg,#ffb86b,var(--pink));animation:float 5.2s ease-in-out infinite reverse;}
-    .matrix {
-      display:grid; gap:14px; margin-top:26px;
-    }
-    .symptom-card, .ability-card, .chip, .progress-card, .glass-card {
-      border: 1px solid rgba(255,255,255,.18);
-      background: linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.055));
-      border-radius: 24px;
-      padding: 18px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.17);
-      position: relative;
-      overflow: hidden;
-    }
-    .symptom-card::after, .ability-card::after, .chip::after, .progress-card::after, .glass-card::after {
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(110deg, transparent, rgba(255,255,255,.13), transparent);
-      transform: translateX(-120%);
-      transition: transform .85s ease;
-      pointer-events: none;
-    }
-    .visible .symptom-card::after, .visible .ability-card::after, .visible .chip::after, .visible .progress-card::after { transform: translateX(120%); }
-    .symptom-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
-    .num { color:var(--green); font-weight:950; font-size:13px; letter-spacing:.12em; }
-    .symptom-title { font-size:22px; font-weight:950; margin-top:8px; letter-spacing:-.8px; }
-    .desc { color:rgba(255,255,255,.68); margin-top:8px; line-height:1.55; font-size:14px; }
-    .percent { font-size:24px; font-weight:950; color:#fff; }
-    .bar { height: 8px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden; margin-top:14px; }
-    .fill { height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg,var(--pink),var(--orange),var(--green)); box-shadow:0 0 20px rgba(52,245,197,.4); transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
-    .visible .fill[data-w="92"]{width:92%;}.visible .fill[data-w="87"]{width:87%;}.visible .fill[data-w="95"]{width:95%;}.visible .fill[data-w="99"]{width:99%;}
-    .lab {
-      margin-top: 28px;
-      position: relative;
-      min-height: 430px;
-      border-radius: 34px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: radial-gradient(circle at 50% 50%, rgba(0,212,255,.22), transparent 33%), linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.04));
-      overflow: hidden;
-      backdrop-filter: blur(22px);
-      box-shadow: var(--shadow);
-    }
-    .orb {
-      position:absolute; inset: 54px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.2);
-      animation: rotate 14s linear infinite;
-      box-shadow: inset 0 0 60px rgba(0,212,255,.16), 0 0 58px rgba(123,97,255,.22);
-    }
-    .orb:nth-child(2){ inset:82px; animation-duration: 9s; animation-direction: reverse; border-style:dashed; }
-    .orb:nth-child(3){ inset:118px; animation-duration: 7s; }
-    .orb::before { content:""; position:absolute; top:-6px; left:50%; width:12px; height:12px; background:var(--green); border-radius:50%; box-shadow:0 0 26px var(--green); }
-    .draft-card {
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width: 210px; height: 270px; border-radius:28px;
-      background: linear-gradient(160deg, rgba(255,255,255,.98), rgba(230,244,255,.9));
-      color:#13122b; padding:18px; box-shadow: 0 26px 70px rgba(0,0,0,.28);
-    }
-    .draft-card .stripe { height: 18px; border-radius: 999px; background: linear-gradient(90deg, var(--violet), var(--blue)); margin-bottom: 14px; }
-    .draft-card .hero-block { height: 110px; border-radius: 22px; background: radial-gradient(circle at 30% 30%, #fff, transparent 30%), linear-gradient(135deg, #7b61ff, #00d4ff 48%, #ff6b9a); margin-bottom: 14px; }
-    .draft-card .line { height: 9px; border-radius:999px; background: rgba(19,18,43,.13); margin: 9px 0; }
-    .orbit-word {
-      position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);
-      font-size: 12px; font-weight:950; letter-spacing:.12em; color:rgba(255,255,255,.82); text-transform:uppercase;
-    }
-    .orbit-word.w1{ transform:translate(-50%,-50%) rotate(0deg) translateY(-178px) rotate(0deg); }
-    .orbit-word.w2{ transform:translate(-50%,-50%) rotate(60deg) translateY(-178px) rotate(-60deg); }
-    .orbit-word.w3{ transform:translate(-50%,-50%) rotate(120deg) translateY(-178px) rotate(-120deg); }
-    .orbit-word.w4{ transform:translate(-50%,-50%) rotate(180deg) translateY(-178px) rotate(-180deg); }
-    .orbit-word.w5{ transform:translate(-50%,-50%) rotate(240deg) translateY(-178px) rotate(-240deg); }
-    .orbit-word.w6{ transform:translate(-50%,-50%) rotate(300deg) translateY(-178px) rotate(-300deg); }
-    .abilities { display:grid; grid-template-columns:1fr; gap:14px; margin-top:22px; }
-    .ability-card h3 { font-size: 20px; font-weight:950; margin-bottom:8px; }
-    .ability-card small { color:var(--green); font-weight:950; letter-spacing:.12em; }
-    .chips { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px; }
-    .chip { min-height:128px; cursor:pointer; transition: transform .25s ease, border-color .25s ease; }
-    .chip:hover, .chip.active { transform: translateY(-6px); border-color: rgba(52,245,197,.55); }
-    .chip strong { display:block; font-size:13px; letter-spacing:.12em; color:rgba(255,255,255,.78); margin-bottom:18px; }
-    .chip span { display:block; font-size:22px; font-weight:950; }
-    .chip:nth-child(1){background:linear-gradient(150deg,rgba(123,97,255,.34),rgba(255,255,255,.06));}
-    .chip:nth-child(2){background:linear-gradient(150deg,rgba(255,107,154,.30),rgba(255,184,107,.14));}
-    .chip:nth-child(3){background:linear-gradient(150deg,rgba(52,245,197,.28),rgba(0,212,255,.10));}
-    .chip:nth-child(4){background:linear-gradient(150deg,rgba(255,107,154,.20),rgba(123,97,255,.24));}
-    .chip:nth-child(5){grid-column:1/-1;background:linear-gradient(150deg,rgba(0,212,255,.28),rgba(255,255,255,.06));}
-    .progress-card { margin-top:28px; }
-    .steps { display:grid; gap:14px; margin-top:18px; }
-    .step { display:grid; grid-template-columns: 112px 1fr 52px; gap:10px; align-items:center; color:rgba(255,255,255,.82); font-size:14px; font-weight:800; }
-    .step .bar { margin:0; height:7px; }
-    .visible .step:nth-child(1) .fill{width:25%; transition-delay:.05s}.visible .step:nth-child(2) .fill{width:48%; transition-delay:.28s}.visible .step:nth-child(3) .fill{width:76%; transition-delay:.52s}.visible .step:nth-child(4) .fill{width:100%; transition-delay:.76s}
-    .transform-box { position:relative; margin-top:24px; min-height:260px; border-radius:28px; background:rgba(0,0,0,.17); border:1px solid rgba(255,255,255,.14); overflow:hidden; }
-    .wire, .final-design { position:absolute; inset:22px; border-radius:22px; transition: opacity 1.4s ease, transform 1.4s ease; }
-    .wire { border:2px dashed rgba(255,255,255,.28); opacity:.9; }
-    .wire::before,.wire::after{content:"";position:absolute;left:22px;right:22px;border-radius:999px;background:rgba(255,255,255,.15)}
-    .wire::before{top:34px;height:18px}.wire::after{bottom:38px;height:14px;box-shadow:0 -42px 0 rgba(255,255,255,.12),0 -84px 0 rgba(255,255,255,.09)}
-    .final-design { opacity:0; transform: scale(.94); background: radial-gradient(circle at 24% 20%, #fff 0 10%, transparent 11%), linear-gradient(135deg, #7b61ff 0%, #00d4ff 48%, #34f5c5 49%, #ff6b9a 100%); box-shadow:0 0 38px rgba(0,212,255,.26); }
-    .final-design::before{content:"DESIGN OUTPUT";position:absolute;left:18px;top:18px;color:white;font-weight:950;letter-spacing:.14em;font-size:12px}.final-design::after{content:"CANVA AI";position:absolute;right:18px;bottom:18px;color:white;font-weight:950;font-size:24px;letter-spacing:-1px}
-    .visible .wire { opacity:0; transform:scale(1.04); transition-delay:.9s; }
-    .visible .final-design { opacity:1; transform:scale(1); transition-delay:1.05s; }
-    .compare { display:grid; grid-template-columns:1fr; gap:16px; margin-top:26px; }
-    .before, .after { min-height: 280px; padding:18px; border-radius:28px; border:1px solid rgba(255,255,255,.16); position:relative; overflow:hidden; background:rgba(255,255,255,.08); }
-    .before { filter: grayscale(.8); opacity:.82; }
-    .before .blank { position:absolute; inset:64px 28px 28px; background:#eef2ff; border-radius:20px; border:2px dashed rgba(19,18,43,.2); }
-    .after { background: radial-gradient(circle at 28% 20%, rgba(255,255,255,.32), transparent 28%), linear-gradient(135deg, rgba(123,97,255,.45), rgba(0,212,255,.24), rgba(255,107,154,.28)); box-shadow: 0 0 48px rgba(0,212,255,.18); }
-    .after .poster { position:absolute; inset:64px 28px 28px; border-radius:22px; background:linear-gradient(135deg,#fff 0 14%,#7b61ff 15% 42%,#00d4ff 43% 64%,#34f5c5 65% 82%,#ff6b9a 83%); box-shadow: 0 16px 42px rgba(0,0,0,.2); }
-    .label-row { display:flex; align-items:center; justify-content:space-between; gap:8px; position:relative; z-index:2; }
-    .label-row b { font-size:20px; letter-spacing:-.6px; }
-    .mini-list { position:absolute; bottom:24px; left:28px; z-index:2; color:rgba(255,255,255,.72); line-height:1.85; font-weight:800; font-size:14px; }
-    .before .mini-list { color:#35364c; }
-    .arrow-splash { text-align:center; margin:4px 0; color:var(--green); font-weight:950; letter-spacing:.12em; font-size:12px; }
-    .final-phone { margin-top:28px; min-height:380px; position:relative; }
-    .phone-mock { position:absolute; left:50%; top:26px; transform:translateX(-50%); width:230px; height:330px; border-radius:34px; background:linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.08)); border:1px solid rgba(255,255,255,.24); box-shadow: var(--shadow); backdrop-filter: blur(20px); padding:18px; animation:float 5.2s ease-in-out infinite; }
-    .phone-mock .screen-inner { height:100%; border-radius:24px; background:linear-gradient(145deg,#fff,#d7f8ff 45%,#efe8ff); color:#13122b; padding:16px; overflow:hidden; }
-    .phone-mock .screen-inner .hero-block { height:120px; border-radius:22px; background:linear-gradient(135deg,#7b61ff,#00d4ff,#ff6b9a); margin:14px 0; }
-    .floating-output { position:absolute; width:126px; height:158px; border-radius:22px; border:1px solid rgba(255,255,255,.18); box-shadow:0 18px 48px rgba(0,0,0,.2); background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.2)); backdrop-filter:blur(14px); }
-    .floating-output.f1{left:4px;top:18px;transform:rotate(-8deg);background:linear-gradient(135deg,#7b61ff,#00d4ff)}
-    .floating-output.f2{right:0;top:72px;transform:rotate(10deg);background:linear-gradient(135deg,#ff6b9a,#ffb86b)}
-    .floating-output.f3{left:20px;bottom:8px;transform:rotate(7deg);background:linear-gradient(135deg,#34f5c5,#00d4ff)}
-    .nav-dots { position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:30; display:flex; flex-direction:column; gap:10px; }
-    .nav-dots a { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.28); border:1px solid rgba(255,255,255,.2); transition:.2s; }
-    .nav-dots a:hover { background:var(--green); box-shadow:0 0 16px var(--green); transform:scale(1.35); }
-    .reveal { opacity:0; transform:translateY(30px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
-    .visible .reveal, .reveal.visible { opacity:1; transform:translateY(0); }
-    .screen-number { position:absolute; right:14px; bottom:32px; font-size:72px; font-weight:950; color:rgba(255,255,255,.055); letter-spacing:-5px; z-index:-1; }
-    .footer-note { color:rgba(255,255,255,.55); font-size:12px; line-height:1.6; margin-top:18px; }
-    @keyframes float { 0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); } 50%{ transform:translateY(-13px) rotate(var(--r,0deg)); } }
-    @keyframes dangerShake { 0%,100%{ transform: translate(-50%, -50%) rotate(-2deg); } 5%{ transform: translate(-50.5%, -50%) rotate(-2.6deg); } 10%{ transform: translate(-49.5%, -50%) rotate(-1.4deg); } 15%{ transform: translate(-50%, -50%) rotate(-2deg); } }
-    @keyframes blink { 0%, 49% { filter: brightness(1); } 50%,100%{ filter: brightness(1.45); } }
-    @keyframes rotate { to { transform: rotate(360deg); } }
-    @media (min-width: 820px) {
-      .stage { max-width: 468px; }
-      .compare { grid-template-columns:1fr; }
-    }
-    @media (max-width: 560px) {
-      .phone-shell { display:none; }
-      .stage { padding-left:18px; padding-right:18px; }
-      .topbar { padding-top:14px; }
-      .pill { font-size:10px; padding:7px 9px; }
-      .chips { grid-template-columns:1fr; }
-      .chip:nth-child(5){grid-column:auto;}
-      .step { grid-template-columns: 92px 1fr 44px; font-size:12px; }
-      .nav-dots { display:none; }
-      h1 { letter-spacing:-2.6px; }
-      h2 { letter-spacing:-1.6px; }
-    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#fff;background:
+      radial-gradient(circle at 9% 12%,rgba(0,212,255,.33),transparent 28%),radial-gradient(circle at 88% 16%,rgba(123,97,255,.45),transparent 31%),radial-gradient(circle at 74% 85%,rgba(255,107,154,.28),transparent 32%),linear-gradient(135deg,#050614,#151239 50%,#070719);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 50% 20%,#000,transparent 78%);opacity:.43}
+    body:after{content:"";position:fixed;inset:0;z-index:10;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 5px);mix-blend-mode:overlay;opacity:.16}
+    #particleCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1;pointer-events:none;opacity:.92}.stage{position:relative;z-index:2;max-width:520px;margin:0 auto;min-height:100vh;padding:0 16px 38px}.phone-shell{position:fixed;z-index:2;pointer-events:none;top:50%;left:50%;width:min(468px,calc(100vw - 24px));height:min(900px,calc(100vh - 28px));transform:translate(-50%,-50%);border-radius:44px;border:1px solid rgba(255,255,255,.23);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 40px 110px rgba(0,0,0,.38);opacity:.55}.phone-shell:before{content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);width:116px;height:24px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.09)}
+    .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:22px 4px 12px;backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:10px;font-weight:950}.logo{width:36px;height:36px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--violet) 55%,var(--pink));box-shadow:0 12px 34px rgba(0,212,255,.28);font-weight:950}.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:rgba(255,255,255,.82);padding:8px 11px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(16px);white-space:nowrap}.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
+    .nav-dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:40;display:grid;gap:9px}.nav-dots a{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.25)}.nav-dots a:hover{background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
+    section.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:74px 10px 88px;position:relative;isolation:isolate}.screen-number{position:absolute;right:10px;bottom:34px;font-size:78px;line-height:1;font-weight:950;letter-spacing:-7px;color:rgba(255,255,255,.075)}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;color:var(--cyan);font-size:12px;font-weight:950;letter-spacing:.18em;text-transform:uppercase}.eyebrow:before{content:"";width:38px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan));box-shadow:0 0 16px var(--cyan)}h1,h2,h3,p{margin:0}h1{font-size:clamp(46px,14vw,72px);line-height:.96;letter-spacing:-3.8px;font-weight:950;margin-bottom:18px;text-wrap:balance}h2{font-size:clamp(34px,10vw,54px);line-height:1.02;letter-spacing:-2.3px;font-weight:950;margin-bottom:14px;text-wrap:balance}.gradient-text{background:linear-gradient(90deg,#fff 0%,#9ff8ff 34%,#b9a6ff 65%,#ff97bf 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.sub{font-size:17px;line-height:1.72;color:rgba(255,255,255,.76);max-width:460px;font-weight:520}.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}a.btn,button.btn{border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 20px;border-radius:18px;font-size:15px;font-weight:950;color:#06111c;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 18px 46px rgba(0,212,255,.28),inset 0 0 0 1px rgba(255,255,255,.34);transition:.25s ease}a.btn:hover,button.btn:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 24px 66px rgba(0,212,255,.36)}a.btn.secondary,button.btn.secondary{color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);box-shadow:none;backdrop-filter:blur(18px)}a.btn.hot{color:#fff;background:linear-gradient(135deg,var(--pink),var(--violet) 55%,var(--blue));box-shadow:0 18px 56px rgba(255,107,154,.28)}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.8,.2,1)}.visible .reveal{opacity:1;transform:none}.hero-grid{display:grid;gap:24px}.glass,.emergency-card,.symptom-card,.ability-card,.chip,.progress-card,.compare-card,.glass-card,.terminal,.gallery-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:linear-gradient(150deg,rgba(255,255,255,.145),rgba(255,255,255,.055));border-radius:var(--r);backdrop-filter:blur(22px);box-shadow:0 18px 50px rgba(0,0,0,.18)}.glass:after,.symptom-card:after,.ability-card:after,.chip:after,.progress-card:after,.gallery-card:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent,rgba(255,255,255,.14),transparent);transform:translateX(-130%);transition:transform .9s ease;pointer-events:none}.visible .glass:after,.visible .symptom-card:after,.visible .ability-card:after,.visible .chip:after,.visible .progress-card:after,.visible .gallery-card:after{transform:translateX(130%)}
+    .emergency-card{min-height:392px;padding:20px;border-radius:34px;background:radial-gradient(circle at 18% 10%,rgba(0,212,255,.28),transparent 31%),radial-gradient(circle at 90% 40%,rgba(255,107,154,.24),transparent 35%),linear-gradient(160deg,rgba(255,255,255,.19),rgba(255,255,255,.055))}.canvas-patient{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-2deg);width:min(305px,80%);aspect-ratio:.78;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(235,246,255,.9));color:#13122b;padding:22px;box-shadow:0 26px 72px rgba(0,0,0,.3);animation:dangerShake 3.1s ease-in-out infinite;overflow:hidden}.canvas-patient:before{content:"";position:absolute;inset:22px;border:2px dashed rgba(19,18,43,.18);border-radius:18px}.canvas-patient .gridline{position:absolute;inset:72px 28px 72px;background:repeating-linear-gradient(90deg,rgba(123,97,255,.12) 0 2px,transparent 2px 22px),repeating-linear-gradient(0deg,rgba(0,212,255,.11) 0 2px,transparent 2px 22px);border-radius:18px}.patient-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;font-weight:950;font-size:12px;letter-spacing:.08em}.alert{display:inline-flex;align-items:center;gap:6px;color:#fff;background:linear-gradient(135deg,#ff3f75,#ff8b55);padding:8px 10px;border-radius:999px;font-size:11px;font-weight:950;box-shadow:0 10px 24px rgba(255,107,154,.32);animation:blink 1.05s steps(2,jump-none) infinite}.card-title-mini{position:absolute;z-index:2;left:22px;bottom:22px;font-weight:950;font-size:28px;letter-spacing:-1.5px;line-height:1.05;color:#161634}.heartbeat{position:absolute;left:24px;right:24px;top:110px;height:46px;z-index:2;opacity:.9}.heartbeat svg{width:100%;height:100%;filter:drop-shadow(0 0 8px rgba(255,107,154,.65))}.warning-tags{position:absolute;inset:0;pointer-events:none}.tag{position:absolute;padding:9px 11px;border-radius:999px;color:#fff;font-size:12px;font-weight:950;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(16px);box-shadow:0 14px 34px rgba(0,0,0,.18)}.tag.t1{left:15px;top:34px;background:linear-gradient(135deg,var(--pink),#ff8b55);animation:float 4.3s ease-in-out infinite}.tag.t2{right:14px;top:78px;background:linear-gradient(135deg,var(--blue),var(--violet));animation:float 5s ease-in-out infinite reverse}.tag.t3{left:22px;bottom:78px;background:linear-gradient(135deg,var(--cyan),var(--blue));animation:float 4.6s ease-in-out infinite}.tag.t4{right:28px;bottom:28px;background:linear-gradient(135deg,#ffb86b,var(--pink));animation:float 5.2s ease-in-out infinite reverse}.tool-float{position:absolute;width:68px;height:68px;border-radius:22px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:28px;backdrop-filter:blur(20px);box-shadow:0 18px 36px rgba(0,0,0,.2)}.tf1{left:35px;top:138px;animation:float 4s infinite ease-in-out}.tf2{right:36px;top:185px;animation:float 4.6s infinite ease-in-out reverse}.tf3{left:72px;bottom:30px;animation:float 5.1s infinite ease-in-out}
+    .matrix{display:grid;gap:14px;margin-top:26px}.symptom-card{padding:18px}.symptom-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.num{color:var(--cyan);font-weight:950;font-size:13px;letter-spacing:.12em}.symptom-title{font-size:22px;font-weight:950;margin-top:8px;letter-spacing:-.8px}.desc{color:rgba(255,255,255,.68);margin-top:8px;line-height:1.55;font-size:14px}.percent{font-size:24px;font-weight:950}.bar{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:14px}.fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--pink),var(--orange),var(--cyan));box-shadow:0 0 20px rgba(52,245,197,.4);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}.visible .fill[data-w="92"]{width:92%}.visible .fill[data-w="87"]{width:87%}.visible .fill[data-w="95"]{width:95%}.visible .fill[data-w="99"]{width:99%}.vitals{margin-top:18px;padding:16px;border-radius:22px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.13)}.vitals-head{display:flex;justify-content:space-between;align-items:center;font-weight:950;font-size:12px;letter-spacing:.1em;color:var(--cyan);text-transform:uppercase}.vitals svg{width:100%;height:82px;margin-top:10px}.vitals path{stroke-dasharray:640;stroke-dashoffset:640;animation:dash 2.8s ease-in-out infinite}
+    .lab{margin-top:28px;position:relative;min-height:470px;border-radius:34px;border:1px solid rgba(255,255,255,.16);background:radial-gradient(circle at 50% 50%,rgba(0,212,255,.22),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));overflow:hidden;backdrop-filter:blur(22px);box-shadow:var(--shadow)}.orb{position:absolute;inset:50px;border-radius:50%;border:1px solid rgba(255,255,255,.22);animation:rotate 14s linear infinite;box-shadow:inset 0 0 60px rgba(0,212,255,.16),0 0 58px rgba(123,97,255,.2)}.orb:nth-child(2){inset:82px;animation-duration:9s;animation-direction:reverse;border-style:dashed}.orb:nth-child(3){inset:118px;animation-duration:7s}.orb:before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;background:var(--cyan);border-radius:50%;box-shadow:0 0 26px var(--cyan)}.draft-card{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:215px;height:280px;border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(230,244,255,.9));color:#13122b;padding:18px;box-shadow:0 26px 70px rgba(0,0,0,.29)}.draft-card .stripe{height:18px;border-radius:999px;background:linear-gradient(90deg,var(--violet),var(--blue));margin-bottom:14px}.hero-block{height:112px;border-radius:22px;background:radial-gradient(circle at 30% 30%,#fff,transparent 30%),linear-gradient(135deg,#7b61ff,#00d4ff 48%,#ff6b9a);margin-bottom:14px}.draft-card .line{height:9px;border-radius:999px;background:rgba(19,18,43,.13);margin:9px 0}.orbit-word{position:absolute;left:50%;top:50%;font-size:12px;font-weight:950;letter-spacing:.12em;color:rgba(255,255,255,.83);text-transform:uppercase}.w1{transform:translate(-50%,-50%) rotate(0deg) translateY(-190px) rotate(0deg)}.w2{transform:translate(-50%,-50%) rotate(60deg) translateY(-190px) rotate(-60deg)}.w3{transform:translate(-50%,-50%) rotate(120deg) translateY(-190px) rotate(-120deg)}.w4{transform:translate(-50%,-50%) rotate(180deg) translateY(-190px) rotate(-180deg)}.w5{transform:translate(-50%,-50%) rotate(240deg) translateY(-190px) rotate(-240deg)}.w6{transform:translate(-50%,-50%) rotate(300deg) translateY(-190px) rotate(-300deg)}.terminal{margin-top:18px;padding:16px;border-radius:24px;background:rgba(0,0,0,.25)}.terminal .cmd{font-size:12px;color:var(--cyan);font-weight:900;letter-spacing:.1em}.terminal .typed{margin-top:9px;font-size:14px;color:rgba(255,255,255,.78);line-height:1.6;min-height:46px}.abilities{display:grid;grid-template-columns:1fr;gap:14px;margin-top:22px}.ability-card{padding:18px}.ability-card h3{font-size:20px;font-weight:950;margin-bottom:8px}.ability-card small{color:var(--cyan);font-weight:950;letter-spacing:.12em}
+    .chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.chip{min-height:136px;cursor:pointer;text-align:left;color:#fff;padding:18px;transition:.25s ease}.chip:hover,.chip.active{transform:translateY(-6px);border-color:rgba(52,245,197,.6);box-shadow:0 20px 58px rgba(0,212,255,.16)}.chip strong{display:block;font-size:12px;letter-spacing:.12em;color:rgba(255,255,255,.78);margin-bottom:18px}.chip span{display:block;font-size:22px;font-weight:950}.chip:nth-child(1){background:linear-gradient(150deg,rgba(123,97,255,.36),rgba(255,255,255,.06))}.chip:nth-child(2){background:linear-gradient(150deg,rgba(255,107,154,.32),rgba(255,184,107,.14))}.chip:nth-child(3){background:linear-gradient(150deg,rgba(52,245,197,.28),rgba(0,212,255,.1))}.chip:nth-child(4){background:linear-gradient(150deg,rgba(255,107,154,.2),rgba(123,97,255,.25))}.chip:nth-child(5){grid-column:1/-1;background:linear-gradient(150deg,rgba(0,212,255,.29),rgba(255,255,255,.06))}.live-brief{margin-top:16px;padding:18px;border-radius:26px;border:1px solid rgba(52,245,197,.25);background:linear-gradient(150deg,rgba(52,245,197,.13),rgba(255,255,255,.055));backdrop-filter:blur(20px)}.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.brief-item{padding:13px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}.brief-item b{display:block;color:var(--cyan);font-size:12px;letter-spacing:.1em;text-transform:uppercase}.brief-item span{display:block;margin-top:6px;font-weight:900}
+    .progress-card{margin-top:28px;padding:18px}.steps{display:grid;gap:14px}.step{display:grid;grid-template-columns:112px 1fr 52px;gap:10px;align-items:center;color:rgba(255,255,255,.83);font-size:14px;font-weight:850}.step .bar{margin:0;height:7px}.visible .step:nth-child(1) .fill{width:25%;transition-delay:.05s}.visible .step:nth-child(2) .fill{width:48%;transition-delay:.3s}.visible .step:nth-child(3) .fill{width:76%;transition-delay:.55s}.visible .step:nth-child(4) .fill{width:100%;transition-delay:.8s}.generate-board{position:relative;margin-top:24px;min-height:326px;border-radius:28px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.14);overflow:hidden}.gen-card{position:absolute;border-radius:22px;box-shadow:0 22px 50px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.18);opacity:0;transform:translateY(28px) rotate(-2deg) scale(.92);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1)}.visible .gen-card{opacity:1;transform:none}.gen1{left:18px;top:26px;width:150px;height:190px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 2px,transparent 2px 20px),linear-gradient(135deg,#6a5cff,#00d4ff);transition-delay:.4s}.gen2{right:18px;top:62px;width:148px;height:188px;background:radial-gradient(circle at 30% 24%,#fff 0 9%,transparent 10%),linear-gradient(135deg,#ff6b9a,#ffb86b);transition-delay:.65s}.gen3{left:88px;bottom:26px;width:188px;height:140px;background:linear-gradient(135deg,#34f5c5,#00d4ff 50%,#7b61ff);transition-delay:.9s}.gen-card:before{content:"";position:absolute;left:16px;right:16px;top:18px;height:14px;border-radius:999px;background:rgba(255,255,255,.72)}.gen-card:after{content:"AI OUTPUT";position:absolute;left:16px;bottom:16px;color:#fff;font-weight:950;letter-spacing:.12em;font-size:11px}.spark{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 24px var(--cyan);opacity:0}.visible .spark{animation:spark 1.8s ease-out infinite}.spark.s1{left:38%;top:30%;animation-delay:.2s}.spark.s2{left:70%;top:38%;animation-delay:.5s}.spark.s3{left:28%;top:72%;animation-delay:.9s}
+    .compare{display:grid;gap:14px;margin-top:24px}.compare-card{padding:18px}.label-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.label-row b{font-size:24px;font-weight:950;letter-spacing:-.8px}.blank{height:220px;border-radius:24px;background:linear-gradient(180deg,#fff,#e9edf8);position:relative;overflow:hidden}.blank:before{content:"";position:absolute;inset:24px;border:2px dashed rgba(19,18,43,.18);border-radius:18px}.mini-list{margin-top:14px;color:rgba(255,255,255,.68);line-height:1.65;font-weight:750}.slider-wrap{position:relative;height:330px;border-radius:30px;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:var(--shadow);background:#fff}.side{position:absolute;inset:0}.side.before-side{background:linear-gradient(180deg,#fff,#e9edf8)}.side.before-side:before{content:"BEFORE";position:absolute;left:22px;top:22px;color:#17172f;font-weight:950;letter-spacing:.12em}.side.before-side:after{content:"空白画布\A没有版式\A没有色彩\A没有方向";white-space:pre;position:absolute;left:24px;bottom:24px;color:rgba(19,18,43,.5);font-weight:900;line-height:1.7}.side.after-side{clip-path:inset(0 0 0 50%);background:radial-gradient(circle at 24% 20%,#fff 0 8%,transparent 9%),linear-gradient(135deg,#7b61ff,#00d4ff 40%,#34f5c5 41%,#ff6b9a 100%)}.side.after-side:before{content:"AFTER";position:absolute;right:22px;top:22px;color:#fff;font-weight:950;letter-spacing:.12em}.side.after-side:after{content:"READY TO PUBLISH";position:absolute;right:22px;bottom:22px;color:#fff;font-weight:950;font-size:26px;line-height:1}.divider{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;box-shadow:0 0 24px #fff}.divider:after{content:"↔";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#13122b;font-weight:950}.range{width:100%;margin-top:14px;accent-color:var(--cyan)}.arrow-splash{text-align:center;color:var(--cyan);font-weight:950;letter-spacing:.12em;margin:4px 0;text-transform:uppercase}
+    .final-phone{position:relative;height:430px;margin-top:26px}.phone-mock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:380px;border-radius:34px;background:#101126;border:1px solid rgba(255,255,255,.22);box-shadow:0 30px 80px rgba(0,0,0,.38);padding:14px;animation:float 5.2s ease-in-out infinite}.screen-inner{height:100%;border-radius:26px;background:linear-gradient(180deg,#fff,#edf7ff);color:#13122b;padding:20px;overflow:hidden}.screen-inner b{font-weight:950;letter-spacing:.14em;font-size:12px}.screen-inner p{font-weight:950;font-size:28px;line-height:1;letter-spacing:-1.6px;margin-top:18px}.floating-output{position:absolute;border-radius:22px;border:1px solid rgba(255,255,255,.18);box-shadow:0 18px 45px rgba(0,0,0,.28);animation:float 5s ease-in-out infinite}.f1{left:8px;top:45px;width:138px;height:176px;background:linear-gradient(135deg,#7b61ff,#00d4ff)}.f2{right:8px;top:88px;width:132px;height:160px;background:linear-gradient(135deg,#ff6b9a,#ffb86b);animation-delay:.4s}.f3{left:34px;bottom:28px;width:180px;height:122px;background:linear-gradient(135deg,#34f5c5,#00d4ff,#7b61ff);animation-delay:.8s}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.gallery-card{min-height:118px;padding:16px}.gallery-card b{font-size:16px}.gallery-card p{font-size:13px}.footer-note{color:rgba(255,255,255,.55);font-size:12px;line-height:1.6;margin-top:22px}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);z-index:80;padding:12px 16px;border-radius:999px;background:rgba(15,16,38,.86);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(20px);box-shadow:0 20px 50px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.3s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}@keyframes rotate{to{transform:rotate(360deg)}}@keyframes blink{50%{opacity:.45}}@keyframes dangerShake{0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}7%{transform:translate(calc(-50% + 2px),calc(-50% - 1px)) rotate(-1deg)}12%{transform:translate(calc(-50% - 2px),calc(-50% + 1px)) rotate(-3deg)}18%{transform:translate(-50%,-50%) rotate(-2deg)}}@keyframes dash{0%{stroke-dashoffset:640}55%{stroke-dashoffset:0}100%{stroke-dashoffset:-640}}@keyframes spark{0%{opacity:0;transform:scale(.2)}40%{opacity:1}100%{opacity:0;transform:scale(3.2)}}
+    @media(max-width:420px){.stage{padding:0 12px 34px}.topbar{padding-top:14px}.pill{font-size:10px;padding:7px 9px}.chips,.brief-grid,.gallery{grid-template-columns:1fr}.chip:nth-child(5){grid-column:auto}.step{grid-template-columns:92px 1fr 44px;font-size:12px}.nav-dots{display:none}h1{letter-spacing:-2.7px}h2{letter-spacing:-1.6px}.lab{min-height:430px}.orbit-word{display:none}.screen-number{font-size:62px}.final-phone{height:390px}}
   </style>
 </head>
 <body>
   <canvas id="particleCanvas" aria-hidden="true"></canvas>
   <div class="phone-shell" aria-hidden="true"></div>
-  <nav class="nav-dots" aria-label="页面导航">
-    <a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a><a href="#s5"></a><a href="#s6"></a><a href="#s7"></a>
-  </nav>
-
+  <nav class="nav-dots" aria-label="页面导航"><a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a><a href="#s5"></a><a href="#s6"></a><a href="#s7"></a></nav>
   <main class="stage">
-    <header class="topbar">
-      <div class="brand"><div class="logo">C</div><span>Canva 可画</span></div>
-      <span class="pill"><i class="dot"></i>AI Emergency</span>
-    </header>
+    <header class="topbar"><div class="brand"><div class="logo">C</div><span>Canva 可画</span></div><span class="pill"><i class="dot"></i>AI Emergency</span></header>
 
     <section class="screen" id="s1">
       <div class="hero-grid">
-        <div class="reveal">
-          <div class="eyebrow">Design Emergency</div>
-          <h1>你的设计，<span class="gradient-text">正在病危。</span></h1>
-          <p class="sub">空白画布、混乱排版、死亡配色、DDL 贴脸……交给 Canva 可画 AI 设计急诊室。</p>
-          <div class="btns">
-            <a class="btn" href="#s2">立即接诊 →</a>
-            <a class="btn secondary" href="#s6">查看抢救结果</a>
-          </div>
-        </div>
-        <div class="emergency-card reveal" style="transition-delay:.15s">
-          <div class="canvas-patient">
-            <div class="patient-top"><span>BLANK CANVAS</span><span class="alert">● CRITICAL</span></div>
-            <div class="card-title-mini">No layout.<br>No color.<br>No idea.</div>
-          </div>
-          <div class="warning-tags">
-            <span class="tag t1">灵感缺失</span><span class="tag t2">排版混乱</span><span class="tag t3">配色失控</span><span class="tag t4">DDL告急</span>
-          </div>
-        </div>
-      </div>
-      <div class="screen-number">01</div>
+        <div class="reveal"><div class="eyebrow">Design Emergency</div><h1>你的设计，<span class="gradient-text">正在病危。</span></h1><p class="sub">空白画布、混乱排版、死亡配色、DDL 贴脸……交给 Canva 可画 AI 设计急诊室。</p><div class="btns"><a class="btn" href="#s2">立即接诊 →</a><a class="btn secondary" href="#s6">查看抢救结果</a></div></div>
+        <div class="emergency-card reveal" style="transition-delay:.15s"><div class="canvas-patient"><div class="patient-top"><span>BLANK CANVAS</span><span class="alert">● CRITICAL</span></div><div class="gridline"></div><div class="heartbeat"><svg viewBox="0 0 300 60" fill="none"><path d="M0 34H42L54 34L65 12L82 52L98 24L112 34H300" stroke="#ff4f86" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="card-title-mini">No layout.<br>No color.<br>No idea.</div></div><div class="tool-float tf1">🎨</div><div class="tool-float tf2">Aa</div><div class="tool-float tf3">✦</div><div class="warning-tags"><span class="tag t1">灵感缺失</span><span class="tag t2">排版混乱</span><span class="tag t3">配色失控</span><span class="tag t4">DDL告急</span></div></div>
+      </div><div class="screen-number">01</div>
     </section>
 
     <section class="screen" id="s2">
-      <div class="reveal">
-        <div class="eyebrow">AI Diagnosis</div>
-        <h2>请确认你的<span class="gradient-text">设计症状</span></h2>
-        <p class="sub">AI 正在扫描你的画布问题，并生成一份视觉急救报告。</p>
-      </div>
+      <div class="reveal"><div class="eyebrow">AI Diagnosis</div><h2>请确认你的<span class="gradient-text">设计症状</span></h2><p class="sub">AI 正在扫描你的画布问题，并生成一份视觉急救报告。</p></div>
       <div class="matrix">
-        <article class="symptom-card reveal" style="transition-delay:.05s">
-          <div class="symptom-head"><div><div class="num">01</div><div class="symptom-title">灵感停机</div><div class="desc">打开软件后大脑空白，需要立即生成参考方向。</div></div><div class="percent">92%</div></div>
-          <div class="bar"><div class="fill" data-w="92"></div></div>
-        </article>
-        <article class="symptom-card reveal" style="transition-delay:.15s">
-          <div class="symptom-head"><div><div class="num">02</div><div class="symptom-title">配色失控</div><div class="desc">颜色越调越乱，画面逐渐失去风格统一。</div></div><div class="percent">87%</div></div>
-          <div class="bar"><div class="fill" data-w="87"></div></div>
-        </article>
-        <article class="symptom-card reveal" style="transition-delay:.25s">
-          <div class="symptom-head"><div><div class="num">03</div><div class="symptom-title">排版塌方</div><div class="desc">文字图片怎么放都不对，版面缺少视觉秩序。</div></div><div class="percent">95%</div></div>
-          <div class="bar"><div class="fill" data-w="95"></div></div>
-        </article>
-        <article class="symptom-card reveal" style="transition-delay:.35s">
-          <div class="symptom-head"><div><div class="num">04</div><div class="symptom-title">时间告急</div><div class="desc">DDL 已经贴脸，需要快速完成可发布成稿。</div></div><div class="percent">99%</div></div>
-          <div class="bar"><div class="fill" data-w="99"></div></div>
-        </article>
+        <article class="symptom-card reveal"><div class="symptom-head"><div><div class="num">01</div><div class="symptom-title">灵感停机</div><div class="desc">打开软件后大脑空白，需要立即生成参考方向。</div></div><div class="percent">92%</div></div><div class="bar"><div class="fill" data-w="92"></div></div></article>
+        <article class="symptom-card reveal"><div class="symptom-head"><div><div class="num">02</div><div class="symptom-title">配色失控</div><div class="desc">颜色越调越乱，画面逐渐失去风格统一。</div></div><div class="percent">87%</div></div><div class="bar"><div class="fill" data-w="87"></div></div></article>
+        <article class="symptom-card reveal"><div class="symptom-head"><div><div class="num">03</div><div class="symptom-title">排版塌方</div><div class="desc">文字图片怎么放都不对，版面缺少视觉秩序。</div></div><div class="percent">95%</div></div><div class="bar"><div class="fill" data-w="95"></div></div></article>
+        <article class="symptom-card reveal"><div class="symptom-head"><div><div class="num">04</div><div class="symptom-title">时间告急</div><div class="desc">DDL 已经贴脸，需要快速完成可发布成稿。</div></div><div class="percent">99%</div></div><div class="bar"><div class="fill" data-w="99"></div></div></article>
       </div>
-      <div class="screen-number">02</div>
+      <div class="vitals reveal"><div class="vitals-head"><span>Design Vital Monitor</span><span>LIVE</span></div><svg viewBox="0 0 420 90" fill="none"><path d="M0 48H44L58 48L72 18L96 74L122 34L146 48H194L212 48L228 28L252 66L280 20L306 48H420" stroke="#34F5C5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="screen-number">02</div>
     </section>
 
     <section class="screen" id="s3">
-      <div class="reveal">
-        <div class="eyebrow">AI Rescue Capsule</div>
-        <h2>Canva AI <span class="gradient-text">急诊舱</span>已启动</h2>
-        <p class="sub">模板、字体、配色、图片和排版正在同步生成，空白画布进入视觉修复流程。</p>
-      </div>
-      <div class="lab reveal" style="transition-delay:.15s">
-        <div class="orb"></div><div class="orb"></div><div class="orb"></div>
-        <span class="orbit-word w1">Template</span><span class="orbit-word w2">Color</span><span class="orbit-word w3">Font</span><span class="orbit-word w4">Layout</span><span class="orbit-word w5">Image</span><span class="orbit-word w6">Copy</span>
-        <div class="draft-card"><div class="stripe"></div><div class="hero-block"></div><div class="line"></div><div class="line" style="width:70%"></div><div class="line" style="width:52%"></div></div>
-      </div>
-      <div class="abilities">
-        <article class="ability-card reveal"><small>01</small><h3>模板匹配</h3><p class="desc">根据场景快速找到版式方向。</p></article>
-        <article class="ability-card reveal"><small>02</small><h3>风格生成</h3><p class="desc">自动形成配色、字体和视觉氛围。</p></article>
-        <article class="ability-card reveal"><small>03</small><h3>一键成稿</h3><p class="desc">把想法压缩成可发布页面。</p></article>
-      </div>
-      <div class="screen-number">03</div>
+      <div class="reveal"><div class="eyebrow">AI Rescue Capsule</div><h2>Canva AI <span class="gradient-text">急诊舱</span>已启动</h2><p class="sub">模板、字体、配色、图片和排版正在同步生成，空白画布进入视觉修复流程。</p></div>
+      <div class="lab reveal"><div class="orb"></div><div class="orb"></div><div class="orb"></div><span class="orbit-word w1">Template</span><span class="orbit-word w2">Color</span><span class="orbit-word w3">Font</span><span class="orbit-word w4">Layout</span><span class="orbit-word w5">Image</span><span class="orbit-word w6">Copy</span><div class="draft-card"><div class="stripe"></div><div class="hero-block"></div><div class="line"></div><div class="line" style="width:70%"></div><div class="line" style="width:52%"></div></div></div>
+      <div class="terminal reveal"><div class="cmd">AI PROMPT CONSOLE</div><div class="typed" id="typed">正在读取设计需求……</div></div>
+      <div class="abilities"><article class="ability-card reveal"><small>01</small><h3>模板匹配</h3><p class="desc">根据场景快速找到版式方向。</p></article><article class="ability-card reveal"><small>02</small><h3>风格生成</h3><p class="desc">自动形成配色、字体和视觉氛围。</p></article><article class="ability-card reveal"><small>03</small><h3>一键成稿</h3><p class="desc">把想法压缩成可发布页面。</p></article></div><div class="screen-number">03</div>
     </section>
 
     <section class="screen" id="s4">
-      <div class="reveal">
-        <div class="eyebrow">Choose Treatment</div>
-        <h2>选择你的<span class="gradient-text">设计急救类型</span></h2>
-        <p class="sub">点击一种任务，AI 将把设计需求转译成版式、色彩和传播稿。</p>
-      </div>
+      <div class="reveal"><div class="eyebrow">Choose Treatment</div><h2>选择你的<span class="gradient-text">设计急救类型</span></h2><p class="sub">点击一种任务，AI 将把设计需求转译成版式、色彩和传播稿。这里会实时生成“急救处方”。</p></div>
       <div class="chips" id="chips">
-        <button class="chip reveal active"><strong>SOCIAL BOOST</strong><span>社媒封面</span><p class="desc">适合小红书、公众号、短视频封面。</p></button>
-        <button class="chip reveal"><strong>EVENT FLASH</strong><span>活动海报</span><p class="desc">快速生成强信息层级的活动页。</p></button>
-        <button class="chip reveal"><strong>CLUB START</strong><span>招新宣传</span><p class="desc">适合社团、班级、校园招新。</p></button>
-        <button class="chip reveal"><strong>NEW DROP</strong><span>新品上新</span><p class="desc">生成电商新品发布视觉。</p></button>
-        <button class="chip reveal"><strong>STUDY PLAN</strong><span>学习计划</span><p class="desc">把计划内容整理成可分享页面。</p></button>
+        <button class="chip reveal active" data-name="社媒封面" data-style="高对比标题 + 强视觉中心" data-color="蓝紫霓虹"><strong>SOCIAL BOOST</strong><span>社媒封面</span><p class="desc">适合小红书、公众号、短视频封面。</p></button>
+        <button class="chip reveal" data-name="活动海报" data-style="大标题主导 + 信息分层" data-color="橙粉能量"><strong>EVENT FLASH</strong><span>活动海报</span><p class="desc">快速生成强信息层级的活动页。</p></button>
+        <button class="chip reveal" data-name="招新宣传" data-style="徽章系统 + 年轻动效" data-color="青绿科技"><strong>CLUB START</strong><span>招新宣传</span><p class="desc">适合社团、班级、校园招新。</p></button>
+        <button class="chip reveal" data-name="新品上新" data-style="产品主视觉 + 卖点卡片" data-color="粉紫渐变"><strong>NEW DROP</strong><span>新品上新</span><p class="desc">生成电商新品发布视觉。</p></button>
+        <button class="chip reveal" data-name="学习计划" data-style="清单排版 + 轻量图标" data-color="蓝白清爽"><strong>STUDY PLAN</strong><span>学习计划</span><p class="desc">把计划内容整理成可分享页面。</p></button>
       </div>
-      <div class="btns reveal"><a class="btn" href="#s5">开始视觉抢救 →</a></div>
-      <div class="screen-number">04</div>
+      <div class="live-brief reveal"><div class="vitals-head"><span>AI Rescue Prescription</span><span id="briefName">社媒封面</span></div><div class="brief-grid"><div class="brief-item"><b>Layout</b><span id="briefStyle">高对比标题 + 强视觉中心</span></div><div class="brief-item"><b>Color</b><span id="briefColor">蓝紫霓虹</span></div></div></div>
+      <div class="btns reveal"><a class="btn" href="#s5">开始视觉抢救 →</a></div><div class="screen-number">04</div>
     </section>
 
     <section class="screen" id="s5">
-      <div class="reveal">
-        <div class="eyebrow">Style Repairing</div>
-        <h2>正在进行<span class="gradient-text">视觉抢救</span>……</h2>
-        <p class="sub">AI 正在重组你的设计稿：从需求扫描到模板匹配，再到风格生成和成稿输出。</p>
-      </div>
-      <div class="progress-card reveal" style="transition-delay:.1s">
-        <div class="steps">
-          <div class="step"><span>扫描需求中</span><div class="bar"><div class="fill"></div></div><b>25%</b></div>
-          <div class="step"><span>匹配模板中</span><div class="bar"><div class="fill"></div></div><b>48%</b></div>
-          <div class="step"><span>生成风格中</span><div class="bar"><div class="fill"></div></div><b>76%</b></div>
-          <div class="step"><span>输出成稿中</span><div class="bar"><div class="fill"></div></div><b>100%</b></div>
-        </div>
-        <div class="transform-box"><div class="wire"></div><div class="final-design"></div></div>
-      </div>
-      <div class="glass-card reveal"><b>从空白画布到完整设计，只差一次生成。</b><p class="desc">Canva 可画将复杂设计流程压缩为“选择场景—生成风格—输出成稿”的连续体验。</p></div>
-      <div class="screen-number">05</div>
+      <div class="reveal"><div class="eyebrow">Style Repairing</div><h2>正在进行<span class="gradient-text">视觉抢救</span>……</h2><p class="sub">AI 正在重组你的设计稿：从需求扫描到模板匹配，再到风格生成和成稿输出。</p></div>
+      <div class="progress-card reveal"><div class="steps"><div class="step"><span>扫描需求中</span><div class="bar"><div class="fill"></div></div><b>25%</b></div><div class="step"><span>匹配模板中</span><div class="bar"><div class="fill"></div></div><b>48%</b></div><div class="step"><span>生成风格中</span><div class="bar"><div class="fill"></div></div><b>76%</b></div><div class="step"><span>输出成稿中</span><div class="bar"><div class="fill"></div></div><b>100%</b></div></div><div class="generate-board"><div class="gen-card gen1"></div><div class="gen-card gen2"></div><div class="gen-card gen3"></div><i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i></div></div>
+      <div class="btns reveal"><button class="btn hot" onclick="regen()">重新生成一套视觉 ✦</button><a class="btn secondary" href="#s6">查看前后对比</a></div>
+      <div class="glass-card reveal" style="padding:18px;margin-top:16px"><b>生成结果不再是静态展示。</b><p class="desc">点击“重新生成”会切换输出方向，让 H5 更像一个 AI 设计实验舱，而不是普通品牌介绍页。</p></div><div class="screen-number">05</div>
     </section>
 
     <section class="screen" id="s6">
-      <div class="reveal">
-        <div class="eyebrow">Final Output</div>
-        <h2><span class="gradient-text">抢救成功！</span></h2>
-        <p class="sub">Before / After 的直观对比，让设计急救结果一眼可见。</p>
-      </div>
-      <div class="compare">
-        <div class="before reveal"><div class="label-row"><b>Before</b><span class="pill">Blank Canvas</span></div><div class="blank"></div><div class="mini-list">空白画布<br/>无灵感<br/>无版式<br/>无方向</div></div>
-        <div class="arrow-splash reveal">AI DESIGN TRANSFORM ↓</div>
-        <div class="after reveal"><div class="label-row"><b>After</b><span class="pill">Ready to Publish</span></div><div class="poster"></div><div class="mini-list">完整视觉<br/>清晰排版<br/>统一风格<br/>可直接发布</div></div>
-      </div>
-      <div class="screen-number">06</div>
+      <div class="reveal"><div class="eyebrow">Final Output</div><h2><span class="gradient-text">抢救成功！</span></h2><p class="sub">拖动对比线，看空白画布如何被 Canva AI 转化为可发布视觉稿。</p></div>
+      <div class="slider-wrap reveal" id="sliderWrap"><div class="side before-side"></div><div class="side after-side" id="afterSide"></div><div class="divider" id="divider"></div></div><input class="range reveal" id="compareRange" type="range" min="8" max="92" value="50" aria-label="Before After 对比滑杆" />
+      <div class="arrow-splash reveal">AI DESIGN TRANSFORM</div><div class="screen-number">06</div>
     </section>
 
     <section class="screen" id="s7">
-      <div class="reveal">
-        <div class="eyebrow">Visual AI Studio</div>
-        <h2>让灵感<span class="gradient-text">不再等待</span></h2>
-        <p class="sub">Canva 可画把复杂设计流程压缩成一次简单的 AI 生成体验。打开需求，选择场景，获得成稿。</p>
-      </div>
-      <div class="final-phone reveal" style="transition-delay:.1s">
-        <div class="floating-output f1"></div><div class="floating-output f2"></div><div class="floating-output f3"></div>
-        <div class="phone-mock"><div class="screen-inner"><b>CANVA AI</b><div class="hero-block"></div><p style="font-weight:950;font-size:22px;line-height:1.1">3 MIN<br/>DESIGN<br/>OUTPUT</p></div></div>
-      </div>
-      <div class="btns reveal"><a class="btn" href="#s1">重新接诊</a><button class="btn secondary" onclick="copyLink()">复制作品链接</button></div>
-      <p class="footer-note reveal">AIGC × H5 Interaction Design｜Design Emergency Room｜本页面为课程作业概念 H5，可部署于 GitHub Pages。</p>
-      <div class="screen-number">07</div>
+      <div class="reveal"><div class="eyebrow">Visual AI Studio</div><h2>让灵感<span class="gradient-text">不再等待</span></h2><p class="sub">Canva 可画把复杂设计流程压缩成一次简单的 AI 生成体验。打开需求，选择场景，获得成稿。</p></div>
+      <div class="final-phone reveal"><div class="floating-output f1"></div><div class="floating-output f2"></div><div class="floating-output f3"></div><div class="phone-mock"><div class="screen-inner"><b>CANVA AI</b><div class="hero-block"></div><p>3 MIN<br/>DESIGN<br/>OUTPUT</p></div></div></div>
+      <div class="gallery"><div class="gallery-card reveal"><b>生成式任务卡</b><p class="desc">用户选择不同需求，页面即时切换设计处方。</p></div><div class="gallery-card reveal"><b>Before / After</b><p class="desc">用拖动对比线强化“抢救成功”的结果感。</p></div></div>
+      <div class="btns reveal"><a class="btn hot" href="https://www.canva.cn/" target="_blank" rel="noopener noreferrer">前往 Canva 可画 →</a><a class="btn secondary" href="#s1">重新接诊</a><button class="btn secondary" onclick="copyLink()">复制作品链接</button></div>
+      <p class="footer-note reveal">AIGC × H5 Interaction Design｜Design Emergency Room｜本页面为课程作业概念 H5，可部署于 GitHub Pages。</p><div class="screen-number">07</div>
     </section>
-  </main>
-
+  </main><div class="toast" id="toast">已复制作品链接</div>
   <script>
-    const screens = document.querySelectorAll('.screen');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.22 });
-    screens.forEach(s => observer.observe(s));
-    document.querySelectorAll('.reveal').forEach(el => {
-      const parent = el.closest('.screen');
-      if (parent && parent.getBoundingClientRect().top < window.innerHeight) parent.classList.add('visible');
-    });
-    document.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    }));
-    function copyLink(){
-      navigator.clipboard && navigator.clipboard.writeText(location.href);
-      alert('作品链接已复制');
-    }
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
-    let w, h, particles;
-    function resize(){
-      w = canvas.width = Math.floor(window.innerWidth * devicePixelRatio);
-      h = canvas.height = Math.floor(window.innerHeight * devicePixelRatio);
-      canvas.style.width = window.innerWidth + 'px'; canvas.style.height = window.innerHeight + 'px';
-      init();
-    }
-    function init(){
-      const count = Math.min(95, Math.floor(window.innerWidth / 7));
-      particles = Array.from({length: count}, () => ({
-        x: Math.random()*w, y: Math.random()*h,
-        vx: (Math.random()-.5)*.22*devicePixelRatio,
-        vy: (Math.random()-.5)*.22*devicePixelRatio,
-        r: (Math.random()*1.8+0.6)*devicePixelRatio,
-        hue: Math.random()<.5 ? 185 : (Math.random()<.8 ? 254 : 336)
-      }));
-    }
-    function draw(){
-      ctx.clearRect(0,0,w,h);
-      for(const p of particles){
-        p.x += p.vx; p.y += p.vy;
-        if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1;
-        ctx.beginPath();
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, .55)`;
-        ctx.shadowBlur = 18*devicePixelRatio; ctx.shadowColor = `hsla(${p.hue}, 100%, 65%, .5)`;
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-      }
-      ctx.shadowBlur = 0;
-      for(let i=0;i<particles.length;i++){
-        for(let j=i+1;j<particles.length;j++){
-          const a=particles[i], b=particles[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
-          if(d < 130*devicePixelRatio){
-            ctx.strokeStyle = `rgba(160,235,255,${(1-d/(130*devicePixelRatio))*0.18})`;
-            ctx.lineWidth = .7*devicePixelRatio;
-            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(draw);
-    }
-    window.addEventListener('resize', resize, { passive:true });
-    resize(); draw();
+    const screens=document.querySelectorAll('.screen');
+    const observer=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.22});screens.forEach(s=>observer.observe(s));
+    document.querySelectorAll('.reveal').forEach(el=>{const p=el.closest('.screen');if(p&&p.getBoundingClientRect().top<innerHeight)p.classList.add('visible')});
+    const chips=document.querySelectorAll('.chip');const briefName=document.getElementById('briefName'),briefStyle=document.getElementById('briefStyle'),briefColor=document.getElementById('briefColor');
+    chips.forEach(chip=>chip.addEventListener('click',()=>{chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active');briefName.textContent=chip.dataset.name;briefStyle.textContent=chip.dataset.style;briefColor.textContent=chip.dataset.color;toast('已选择：'+chip.dataset.name)}));
+    const typed=document.getElementById('typed');const lines=['/scan blank_canvas --detect inspiration_loss','/match template --scene visual_emergency','/generate style --color neon_gradient --layout smart_grid','/export output --ready_to_publish'];let li=0,ci=0;
+    function typeLoop(){const txt=lines[li];typed.textContent='> '+txt.slice(0,ci++);if(ci>txt.length+14){ci=0;li=(li+1)%lines.length}setTimeout(typeLoop,ci===0?700:42)}typeLoop();
+    function regen(){const palette=[['#7b61ff','#00d4ff','#34f5c5'],['#ff6b9a','#ffb86b','#ffe66d'],['#34f5c5','#00d4ff','#7b61ff'],['#ff6b9a','#7b61ff','#00d4ff']][Math.floor(Math.random()*4)];document.documentElement.style.setProperty('--violet',palette[0]);document.documentElement.style.setProperty('--blue',palette[1]);document.documentElement.style.setProperty('--cyan',palette[2]);toast('已重新生成一套视觉方向')}
+    const range=document.getElementById('compareRange'),afterSide=document.getElementById('afterSide'),divider=document.getElementById('divider');function updateCompare(){const v=range.value;afterSide.style.clipPath=`inset(0 0 0 ${v}%)`;divider.style.left=v+'%'}range.addEventListener('input',updateCompare);updateCompare();
+    function copyLink(){navigator.clipboard&&navigator.clipboard.writeText(location.href);toast('作品链接已复制')}
+    function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800)}
+    const canvas=document.getElementById('particleCanvas'),ctx=canvas.getContext('2d');let w,h,particles,pointer={x:0,y:0,active:false};
+    function resize(){w=canvas.width=Math.floor(innerWidth*devicePixelRatio);h=canvas.height=Math.floor(innerHeight*devicePixelRatio);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';init()}
+    function init(){const count=Math.min(120,Math.floor(innerWidth/6));particles=Array.from({length:count},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.24*devicePixelRatio,vy:(Math.random()-.5)*.24*devicePixelRatio,r:(Math.random()*1.8+.55)*devicePixelRatio,hue:Math.random()<.45?185:(Math.random()<.78?254:336)}))}
+    addEventListener('pointermove',e=>{pointer.x=e.clientX*devicePixelRatio;pointer.y=e.clientY*devicePixelRatio;pointer.active=true},{passive:true});addEventListener('pointerleave',()=>pointer.active=false,{passive:true});
+    function draw(){ctx.clearRect(0,0,w,h);for(const p of particles){if(pointer.active){const dx=p.x-pointer.x,dy=p.y-pointer.y,d=Math.hypot(dx,dy);if(d<150*devicePixelRatio){p.vx+=dx/d*.014;p.vy+=dy/d*.014}}p.x+=p.vx;p.y+=p.vy;p.vx*=.995;p.vy*=.995;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;ctx.beginPath();ctx.fillStyle=`hsla(${p.hue},100%,70%,.58)`;ctx.shadowBlur=18*devicePixelRatio;ctx.shadowColor=`hsla(${p.hue},100%,65%,.5)`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const a=particles[i],b=particles[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);if(d<132*devicePixelRatio){ctx.strokeStyle=`rgba(160,235,255,${(1-d/(132*devicePixelRatio))*.18})`;ctx.lineWidth=.7*devicePixelRatio;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}requestAnimationFrame(draw)}addEventListener('resize',resize,{passive:true});resize();draw();
   </script>
 </body>
 </html>
